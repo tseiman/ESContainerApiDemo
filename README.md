@@ -8,8 +8,7 @@ The router will give the container an own IP address such as 192.168.1.100 - so 
 
 The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wirleess RV55 
 
-## 
-requires:
+## requires:
 - linux build environment
 - docker buildx   (check with ```docker builx version```)
 - wget
