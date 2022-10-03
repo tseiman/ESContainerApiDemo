@@ -16,3 +16,6 @@ The scripts can be easily adopted to other architectures like armv7 e.g. built i
 
 ## What does this do ?
 this setup will download the __lowjs__ Armv8 implementation from the LowJS distribution webpage. It will extract LowJS and bundle it wit hhte WebApplication
+
+## build
+```make build```
