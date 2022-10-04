@@ -10,7 +10,7 @@ The scripts can be easily adopted to other architectures like armv7 e.g. built i
 
 ## requires:
 - linux environment
-- docker buildx   (check availability with ```docker builx version```) if you do not have *docker buildx* installed you may if not, please follow buildx installation steps, binary installation might be the easiest one:
+- docker buildx   (check availability with ```docker builx version```) if you do not have *docker buildx* installed you may follow buildx installation steps, binary installation might be the easiest one:
 https://github.com/docker/buildx#binary-release
 - we want to build on likely different platform (e.g. amd64) the docker image - so everything needs to be preapred for cross image build which requires typically qemu on ubuntu you install this with: ```sudo apt install qemu qemu-user-static qemu-user binfmt-support``` check proper binfmt config
 
