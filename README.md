@@ -1,6 +1,6 @@
 # ESContainerApiDemo
 Demonstration how to build a Docker container for the Sierra Wireless Docker enabled routers
-The demo will setup a docker image with a LowJS which is a small version of NodeJS. The WebApplicaiton LowJs provides (and which is accessible under 8080 for HTTP and 8443 for HTTPS).
+The demo will setup a docker image with a LowJS which is a small version of NodeJS. The WebApplicaiton LowJs provides an example GUI which indirectely will make use of the router API for WiFi Client managment (and which is accessible under 8080 for HTTP and 8443 for HTTPS).
 The router will give the container an own IP address such as 192.168.1.100 - so you should be able to reach the application under https://192.168.1.100:8443
 
 ## Target Platforms

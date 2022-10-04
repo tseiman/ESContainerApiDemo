@@ -32,6 +32,7 @@
 
         // Output messages received via WebSocket
         wss.onmessage = function (event) {
+	    console.log(event);
             addMessage(escapeHTML(event.data));
         }
 

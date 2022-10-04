@@ -54,7 +54,7 @@ wss.on('connection', function connection(ws) {
         console.log("broadcasting message: " + data);
         wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN)
-                client.send(data);
+                client.send(data.toString());
         });
     });
 });
