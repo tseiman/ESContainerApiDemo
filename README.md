@@ -29,7 +29,7 @@ interpreter /usr/bin/qemu-arm-static
 ```
 
 ## What does this do ?
-this setup will download the NodeJS Armv8 implementation from the NodeJS distribution webpage. It will extra it and bundle it with the WebApplication
+this setup will download the NodeJS Armv8 implementation from the NodeJS distribution webpage. It will extract it and bundle it with the WebApplication
 
 ## build & run & archive
 Create the image on the local 
