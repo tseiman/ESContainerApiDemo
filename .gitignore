@@ -1,3 +1,4 @@
 *.tar
 *.tar.gz
-/src/node_modules
+/src/node_modules/*
+!/src/node_modules/.keep
