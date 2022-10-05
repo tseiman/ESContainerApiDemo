@@ -6,7 +6,7 @@ The router will give the container an own IP address such as 192.168.1.100 - so 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
 
-The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wirleess RV55 
+The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wireless RV55 
 
 ## requires:
 - linux environment
@@ -29,7 +29,8 @@ interpreter /usr/bin/qemu-arm-static
 ```
 
 ## What does this do ?
-this setup will download the NodeJS Armv8 implementation from the NodeJS distribution webpage. It will extract it and bundle it with the WebApplication
+this setup will install the NodeJS Armv8 package from Alpine Linux distribution. For the WebApplication from the *src* directory *npm* is executed to download required *node_modules*. Node_modules which need to be present in production and the WebApplication is then added to the docker image as well.
+Finally a comand is set to execute NodeJS with the WebApplication.
 
 ## build & run & archive
 Create the image on the local 

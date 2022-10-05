@@ -1,0 +1,26 @@
+
+
+html, body {
+  height: 100%;
+}
+
+.titleimage {
+  height: 40px;
+
+}
+
+#configpage {
+  display:  none;
+}
+
+
+.fullpage {
+  height: 100%;
+}
+#configpage-title {
+  font-weight: bold;
+}
+
+.headlinetext {
+  margin-top: 3px;
+}

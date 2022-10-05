@@ -1,73 +1,45 @@
-var http = require('http');
-var https = require('https');
-var fs = require('fs');
-var tls = require('tls');
-var path = require('path');
+const yargs = require('yargs');
 
-var wwwPath = path.join(__dirname, 'www');
-function handleRequest(req, res) {
-    var url = req.url == '/' ? '/index.html' : req.url;
+const HTTPServer        = require('./HTTPServer.js');
+const WebSocketServer   = require('./WebSocketServer.js');
+const RESTClient        = require('./RESTClient.js');
 
-    // add more as required...
-    var contentType;
-    if (url.substr(-4) == '.png')
-        contentType = 'image/png';
-    else if (url.substr(-4) == '.css')
-        contentType = 'text/css';
-    else
-        contentType = 'text/html';
-    res.setHeader("Content-Type", contentType);
 
-    console.log("streaming " + wwwPath + url);
 
-    var stream = fs.createReadStream(wwwPath + url);
-    stream.on('error', function (err) {
-        res.statusCode = 404;
-        res.end(err.message);
-    });
-    stream.pipe(res);
+
+const options = yargs
+    .option("a", { 
+        alias: "apiserver", 
+        describe: "The URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar", 
+        type: "string", 
+        default: "https://192.168.1.1",
+        demandOption: false
+    })
+    .option("u", { 
+        alias: "user", 
+        describe: "The name of the user for the Router API", 
+        type: "string",
+        default: "admin", 
+        demandOption: false 
+    })
+    .option("p", { 
+        alias: "password", 
+        describe: "The password for the API user", 
+        type: "string",
+        demandOption: true 
+    })
+    .argv;
+
+if((typeof options.apiserver === undefined) || (! options.apiserver.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/) )  ) {
+    console.log("Give the URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar");
+    process.exit(1);
 }
 
-var httpServer = http.createServer(handleRequest).listen(8080, function (err) {
-    if (!err)
-        console.log('listening on http://' + httpServer.address().address + ':' + httpServer.address().port + '/');
-});
 
-var options = {
-    key: fs.readFileSync(path.join(__dirname, 'server.key')),
-    cert: fs.readFileSync(path.join(__dirname, 'server.crt'))
-};
-var httpsServer = https.createServer(options, handleRequest).listen(8443, function (err) {
-    if (!err)
-        console.log('listening on https://' + httpsServer.address().address + ':' + httpsServer.address().port + '/ with self-signed certificate (warning is OK)');
-});
+var server = new HTTPServer();
 
 
-// ***** WebSocket server for chat
-// remove this code to remove chat functionality
+var ws = new WebSocketServer(server);
 
-var WebSocket = require('ws');
-var wss = new WebSocket.Server({ noServer: true });
-
-wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(data) {
-        console.log("broadcasting message: " + data);
-        wss.clients.forEach(function each(client) {
-            if (client !== ws && client.readyState === WebSocket.OPEN)
-                client.send(data.toString());
-        });
-    });
-});
-function upgradeToWSS(req, socket, head) {
-    if (req.url === '/Chat') {
-        console.log("webbrowser connected to chat");
-
-        wss.handleUpgrade(req, socket, head, function done(ws) {
-            wss.emit('connection', ws, req);
-        });
-    } else
-        socket.destroy();
-}
-
-httpServer.on('upgrade', upgradeToWSS);
-httpsServer.on('upgrade', upgradeToWSS);
+var rc = new RESTClient(options.apiserver, options.user, options.password);
+rc.connect();
