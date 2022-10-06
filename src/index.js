@@ -2,6 +2,7 @@ const yargs = require('yargs');
 
 const HTTPServer        = require('./HTTPServer.js');
 const WebSocketServer   = require('./WebSocketServer.js');
+const DataHandler       = require('./DataHandler.js');
 const RESTClient        = require('./RESTClient.js');
 
 
@@ -37,9 +38,10 @@ if((typeof options.apiserver === undefined) || (! options.apiserver.match(/https
 
 
 var server = new HTTPServer();
-
-
 var ws = new WebSocketServer(server);
+var dh = new DataHandler(ws);
+
 
 var rc = new RESTClient(options.apiserver, options.user, options.password);
+rc.setCallback(dh.sendMessage, dh);
 rc.connect();

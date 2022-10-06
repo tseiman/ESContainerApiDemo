@@ -9,6 +9,7 @@ class RESTClient {
 		this.servername = server;
 		this.apiuser = user;
 		this.apuserpw = password;
+		this.callback = null;
 
 		this.accessToken = null;
 
@@ -26,6 +27,10 @@ class RESTClient {
 
 	}
 
+	setCallback(cb, ctx) {
+		this.callback = cb;
+		this.callbackCtx = ctx;
+	}
 
 	isTokenValid() {
 		if(this.accessToken !== null && this.accessToken !== "") return true;
@@ -117,7 +122,9 @@ class RESTClient {
 			this.restClient.methods.registerEventMethod(args,function (data, response) {
 				var parsedData = JSON.parse(data);
 				if(typeof parsedData.data === undefined) resolve('resolved');
-				console.log(parsedData.data);
+			//	console.log(parsedData.data);
+				that.callback(parsedData.data, that.callbackCtx);
+
 				resolve('resolved');
 			}).on('error',function(err){
 					reject(err);
@@ -133,6 +140,7 @@ class RESTClient {
 
 			console.log("Poll events");
 			if(!this.isTokenValid()) {
+				console.error("Invalid token");
 				reject("Invalid token cant register eventMethod");
 			}
 
@@ -147,12 +155,20 @@ class RESTClient {
 				}
 			};
 
-			this.restClient.methods.getUpdateEvents(args,function (data, response) {
+			this.restClient.methods.getUpdateEvents(args,async function (data, response) {
 				if(data.length > 0) {
 					var parsedData = JSON.parse(data);
 					if((typeof parsedData.data === undefined) || (typeof parsedData.data.db === undefined) || (typeof parsedData.data.db.last === undefined)) resolve('resolved');
 
-					console.log(parsedData.data.db.last);
+//					console.log(parsedData.data.db.last);
+					that.callback(parsedData.data.db.last, that.callbackCtx);
+
+				} else {
+					console.error("poll returned zero length", response.statusMessage);
+					if(response.statusMessage === "Unauthorized") {
+						await that.autenticate();
+						await that.registerEventhandler();
+					}
 				}
 				resolve('resolved');
 			}).on('error',function(err){
