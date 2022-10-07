@@ -80,6 +80,7 @@ class RESTClient {
 					if(parsedData.data != null && parsedData.data.access_token != null) {
 						that.accessToken = JSON.parse(data).data.access_token;
 					} else {
+						console.log("API HTTP Message response: " + response.statusMessage, data);
 						that.accessToken = null;
 					}
 					console.log("New access token: " + that.accessToken);
