@@ -5,7 +5,7 @@ const WebSocketServer   = require('./WebSocketServer.js');
 const DataHandler       = require('./DataHandler.js');
 const RESTClient        = require('./RESTClient.js');
 
-
+var Ping = require('ping');
 
 
 const options = yargs
@@ -36,6 +36,13 @@ if((options.apiserver == null) || (! options.apiserver.match(/https?:\/\/(www\.)
     process.exit(1);
 }
 
+var serveraddress = options.apiserver.match(/^https?:\/\/(.*)(:[0-9]+)?/);
+serveraddress = serveraddress[1];
+
+Ping.sys.probe(serveraddress, function(isAlive){
+        var msg = isAlive ? 'host ' + serveraddress + ' is alive' : 'host ' + serveraddress + ' is dead';
+        console.log(msg);
+});
 
 var server = new HTTPServer();
 var ws = new WebSocketServer(server);
