@@ -8,12 +8,20 @@ class WebSocketServer {
 		var that = this;
 		this.server = server;
 
+		this.triggerEmitterOnConnect = [];
+
 		this.wss = new WebSocket.Server({ noServer: true });
 
 		this.wss.on('connection', function connection(ws) {
 		    ws.on('message', function incoming(data) {
-		        that.onMessage(data);
+		        that.onMessage(data, ws);
 		    });
+		    console.log("Connected client !!");
+		    for(const emitter of that.triggerEmitterOnConnect) {
+		    	emitter.emitter(emitter.ctx);
+//		    	console.log("emitting  !!", emitter);
+		    }
+		    
 		});
 
 
@@ -21,10 +29,29 @@ class WebSocketServer {
 		this.server.httpsServer.on('upgrade', function(req, socket, head) { that.upgradeToWSS(req, socket, head) });
 	} 
 
+	registerEmitterTrigger(emitter, ctx) {
+		console.log("registerEmitterTrigger(emitter, ctx)");
+		this.triggerEmitterOnConnect.push({'emitter': emitter, 'ctx': ctx});
+	}
 
 
-	onMessage(data) {
-		console.log("sending data: " + data);
+
+	sendJSON(data, wss) {
+		console.log("Send JSON to Client serverinitiated");
+		var jsonStr = JSON.stringify(data);
+		if( ( wss == null) || (wss.clients == null)) {
+			console.log("no WS clients");
+			return;
+		}
+		wss.clients.forEach(function each(client) {
+            if ( client.readyState === WebSocket.OPEN) {
+                client.send(jsonStr);
+            }
+        });
+	}
+
+	onMessage(data, ws) {
+		console.log("receiving data: " + data);
         this.wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(data.toString());

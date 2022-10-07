@@ -31,7 +31,7 @@ const options = yargs
     })
     .argv;
 
-if((typeof options.apiserver === undefined) || (! options.apiserver.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/) )  ) {
+if((options.apiserver == null) || (! options.apiserver.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/) )  ) {
     console.log("Give the URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar");
     process.exit(1);
 }

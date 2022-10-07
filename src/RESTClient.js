@@ -77,7 +77,7 @@ class RESTClient {
 
 			this.restClient.methods.authenticateMethod(args, function (data, response) {
 					var parsedData = JSON.parse(data);
-					if(typeof parsedData.data !== undefined && typeof parsedData.data.access_token !== undefined) {
+					if(parsedData.data != null && parsedData.data.access_token != null) {
 						that.accessToken = JSON.parse(data).data.access_token;
 					} else {
 						that.accessToken = null;
@@ -121,7 +121,7 @@ class RESTClient {
 
 			this.restClient.methods.registerEventMethod(args,function (data, response) {
 				var parsedData = JSON.parse(data);
-				if(typeof parsedData.data === undefined) resolve('resolved');
+				if(parsedData.data == null) resolve('resolved');
 			//	console.log(parsedData.data);
 				that.callback(parsedData.data, that.callbackCtx);
 
@@ -158,7 +158,7 @@ class RESTClient {
 			this.restClient.methods.getUpdateEvents(args,async function (data, response) {
 				if(data.length > 0) {
 					var parsedData = JSON.parse(data);
-					if((typeof parsedData.data === undefined) || (typeof parsedData.data.db === undefined) || (typeof parsedData.data.db.last === undefined)) resolve('resolved');
+					if((parsedData.data == null) || (parsedData.data.db == null) || (parsedData.data.db.last == null)) resolve('resolved');
 
 //					console.log(parsedData.data.db.last);
 					that.callback(parsedData.data.db.last, that.callbackCtx);
