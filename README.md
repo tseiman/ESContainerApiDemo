@@ -1,7 +1,16 @@
-# ESContainerApiDemo
+# ESContainerApiDemo for Container enabled Sierra Wireless AirLink OS (such as on XR80/90 or RV55)
 Demonstration how to build a Docker container for the Sierra Wireless Docker enabled routers
 The demo will setup a docker image with NodeJS. The WebApplication running on NodeJS provides an example GUI which indirectely will make use of the router API for WiFi Client managment (and which is accessible under 8080 for HTTP and 8443 for HTTPS).
 The router will give the container an own IP address such as 192.168.1.100 - so you should be able to reach the application under https://192.168.1.100:8443
+
+## Content
+  * [Target Platforms](#target-platforms)
+  * [ToDo](#todo)
+  * [requires:](#requires-)
+  * [What does this do ?](#what-does-this-do--)
+  * [build & run & archive](#build---run---archive)
+    + [Run image on AirLink OS](#run-image-on-airlink-os)
+  * [security](#security)
 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
@@ -64,10 +73,11 @@ Now instanciate the image to a running container:
 1. Fill a name for the container
 2. select the image loaded previously
 3. set the command ```/usr/bin/node --max_old_space_size=128 /app/index.js -a https://<IP of the Router> -u <user with api rights> -p <somepasword for the user>``` - e.g. ```/usr/bin/node --max_old_space_size=128 /app/index.js -a https://192.168.1.1 -u admin -p somepassword``` - please note it is not recommended to use the adin user and password to access the API.
-
+4. click create ad check if the container status changes to *"running"* after a while
 
 
 
 
 ## security
 __Please note: the setup comes with default certificates - which are snake oil. For any security please substitute those trough useful ones!__
+Please do not use admin user for API access
