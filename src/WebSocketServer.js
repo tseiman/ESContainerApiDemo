@@ -49,7 +49,7 @@ class WebSocketServer {
 
 
 	sendJSON(data, wss) {
-		Logger.log("Send JSON to Client serverinitiated");
+		Logger.debug("Send JSON to Client serverinitiated");
 		var jsonStr = JSON.stringify(data);
 		if( ( wss == null) || (wss.clients == null)) {
 			Logger.debug("no WS clients");
