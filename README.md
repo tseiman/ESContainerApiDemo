@@ -53,6 +53,21 @@ make image
 ```
 this will create a tar file (escontainer_api_demo_armv8_<date>.tar) containing the docker image - this can be directly uploaded to the Armv8 XR80 (or with adaptaions to Armv7 RV55)
 
+### Run image on AirLink OS
+Log in (locally - e.g. by accessing the defualt IP https://192.168.1.1) and navigate to **[Apps]** --> **[Images]**
+Upload the **tar** image to the router (the ready made image might be ZIPed and needs to be unzipped before):
+![Loading the image](/doc/image_loading_screenshot.png)
+Wait until the status is marked as ready.
+Now instanciate the image to a running container:
+![Loading the image](/doc/container_creation_screenshot.png)
+![Loading the image](/doc/container_creation2_screenshot.png)
+1. Fill a name for the container
+2. select the image loaded previously
+3. set the command ```/usr/bin/node --max_old_space_size=128 /app/index.js -a https://<IP of the Router> -u <user with api rights> -p <somepasword for the user>``` - e.g. ```/usr/bin/node --max_old_space_size=128 /app/index.js -a https://192.168.1.1 -u admin -p somepassword``` - please note it is not recommended to use the adin user and password to access the API.
+
+
+
+
 
 ## security
 __Please note: the setup comes with default certificates - which are snake oil. For any security please substitute those trough useful ones!__
