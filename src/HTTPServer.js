@@ -1,3 +1,14 @@
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Server side - runs the HTTP server which delivers the static 
+ * HTTP content and updates the connection to WebSocket if possible
+ *
+ * -------------------------------------------------------------- */
+
 "use strict";
 
 var http = require('http');

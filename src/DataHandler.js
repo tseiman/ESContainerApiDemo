@@ -1,5 +1,18 @@
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Server side - contains the data structure and manages the data
+ *
+ * -------------------------------------------------------------- */
+
+
 "use strict";
 
+
+const TIMEOUT_IN_SECONDS = 5*50;
 class DataHandler {
 
 	constructor(ws) {
@@ -33,6 +46,7 @@ class DataHandler {
 
 			ctx.wifiStations[key] = ctx.wifiStations[key] || {};
 			ctx.wifiStations[key].present = true;
+			ctx.wifiStations[key].lastseen = Math.floor(Date.now() / 1000);
 
 //			console.log(data[k]);
 			if(valuesList === null) {
@@ -85,10 +99,17 @@ class DataHandler {
 
 		Object.keys(ctx.wifiStations).forEach(function(k){ 
 
+ 				if((ctx.wifiStations[k].lastseen + TIMEOUT_IN_SECONDS) < Math.floor(Date.now() / 1000)) {
+ 					ctx.wifiStations[k].present =null;
+ 					ctx.wifiStations[k].ssid = null;
+ 					console.log("invalidating station due to timeout");
+ 				}
+
 				if(ctx.wifiStations[k].present === null || ctx.wifiStations[k].ssid === null) {
  					console.log("Removing station with key(" + k + ") ");
  					delete ctx.wifiStations[k];
  				} 
+
 
 		});
 		console.log("got new data: ", ctx.wifiStations);

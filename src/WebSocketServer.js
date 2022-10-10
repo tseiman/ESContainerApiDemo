@@ -1,3 +1,14 @@
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Server side - the WebSocket is initiated and run from here
+ * data might be distributed on demand to the WebClients
+ *
+ * -------------------------------------------------------------- */
+
 "use strict";
 
 var WebSocket = require('ws');

@@ -1,3 +1,15 @@
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Server side main routine takes command line parameters and 
+ * initiates the HTTP server and the API client
+ *
+ * -------------------------------------------------------------- */
+
+
 const yargs = require('yargs');
 
 const HTTPServer        = require('./HTTPServer.js');

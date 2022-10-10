@@ -1,45 +1,14 @@
-// Helper function to escape HTML, so no XSS is possible
-
-/* var entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': '&quot;',
-    "'": '&#39;',
-    "/": '&#x2F;'
-};
-function escapeHTML(string) {
-    return String(string).replace(/[&<>"'\/]/g, function (s) {
-        return entityMap[s];
-    });
-}
-function addMessage(txt) {
-    var messages = document.getElementById('messages');
-    messages.innerHTML += txt + '<br>';
-    messages.scrollTop = messages.scrollHeight;
-}
-
-// Connect via WebSocket
-var loc = window.location;
-var wss = new WebSocket((loc.protocol === "https:" ? "wss://" : "ws://") + loc.host + "/event");
-
-// Output messages received via WebSocket
-wss.onmessage = function (event) {
-console.log(event);
-    addMessage(escapeHTML(event.data));
-}
-
-// Send message via WebSocket
-function messageSubmit() {
-    var txt = document.getElementById('messageSend').value;
-    document.getElementById('messageSend').value = '';
-
-    addMessage('<font color="#999999">' + escapeHTML(txt) + '</font>');
-    wss.send(txt);
-    return false;
-}
-console.log("uhhh ?");
-*/
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Client side - runs the javscript to obtain data from the 
+ * server via WebSocket and updates the HTML accordingly
+ * Handles as well GUI events
+ *
+ * -------------------------------------------------------------- */
 
 var data = {};
 
@@ -61,8 +30,26 @@ wss.onmessage = function (event) {
                     </tr>
                 </thead>
                 */
+
+
+        var bandshtml = "<span>";
+        var bandIndex = 0;
+        for(band in data[k].bands) {
+            ++bandIndex;
+            bandshtml += `<span>Ch: ${data[k].bands[band].channel}</span><span>(${data[k].bands[band].band === "2400"? "2.4Ghz" : "5Ghz" })</span><span class="material-symbols-outlined signal-bars">signal_cellular_${data[k].bands[band].bars > 4 ? 4 : data[k].bands[band].bars}_bar</span><span class="${bandIndex < Object.keys(data[k].bands).length ? "channelseparator" : ""}"></span>`;
+
+        }
+        bandshtml += "</span>"
+        
+        var selected = `<span class="material-symbols-outlined wifi-connected">${data[k].selected ? "link" : "link_off"}</span>`
+
+
+
+
         if($("#row_" + k).length) {
-            $("#row_" + k).html(`<td>${data[k].ssid}</td><td>${data[k].security_mode}</td><td>${data[k].selected}</td><td></td></tr>`);
+
+
+            $("#row_" + k).html(`<td>${data[k].ssid}</td><td>${data[k].security_mode}</td><td>${selected}</td><td>${bandshtml}</td>`);
             $('#ssidTable').find('tr').each(function() { 
                 if(!data.hasOwnProperty($(this).attr('data-id'))) {
                     console.log($(this)); 
@@ -70,10 +57,8 @@ wss.onmessage = function (event) {
                 }
             });
 
-
-
         } else {
-            $('#ssidTable').append(`<tr id="row_${k}" class="clickable-row" data-id="${k}" data-ssid="${data[k].ssid}"><td>${data[k].ssid}</td><td>${data[k].security_mode}</td><td>${data[k].selected}</td><td></td></tr>`);
+            $('#ssidTable').append(`<tr id="row_${k}" class="clickable-row" data-id="${k}" data-ssid="${data[k].ssid}"><td>${data[k].ssid}</td><td>${data[k].security_mode}</td><td>${selected}</td><td>${bandshtml}</td></tr>`);
         }
 
         $(".clickable-row").click(function() {
@@ -84,15 +69,6 @@ wss.onmessage = function (event) {
 
     });
 
-/*     $('#ssidTable').append(`<tr id="R${++rowIdx}">
-          <td class="row-index text-center">
-                <p>Row ${rowIdx}</p></td>
-           <td class="text-center">
-            <button class="btn btn-danger remove" 
-                type="button">Remove</button>
-            </td>
-           </tr>`);
-*/
 
 }
 
@@ -111,3 +87,4 @@ jQuery(document).ready(function($) {
          $("#configpage").fadeOut(500, () => { $("#mainpage").show(); });
     });
 });
+

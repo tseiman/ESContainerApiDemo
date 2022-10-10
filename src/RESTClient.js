@@ -1,3 +1,16 @@
+/* ----------------------------------------------------------------
+ *
+ * (c) October 2022, SWI Thomas Schmidt
+ *
+ * Demo to present container and API of AirLinkOS
+ *
+ * Server side - the RESt client which authenticates and connects
+ * to the AirLink OS and polls the data from the API event queue.
+ * Data is forwarded to the DataHandler where the server side 
+ * data structure is updated
+ *
+ * -------------------------------------------------------------- */
+
 "use strict";
 
 const Client = require('node-rest-client').Client;
@@ -71,7 +84,7 @@ class RESTClient {
 					"accept": "application/vnd.api+json"
 				},
 				requestConfig: {
-					timeout: 1000
+					timeout: 2000
 				}
 			};
 
@@ -80,7 +93,8 @@ class RESTClient {
 					if(parsedData.data != null && parsedData.data.access_token != null) {
 						that.accessToken = JSON.parse(data).data.access_token;
 					} else {
-						console.log("API HTTP Message response: " + response.statusMessage, data);
+						console.log("API HTTP Message response: " + response.statusMessage);
+						console.log("Response data:", data);
 						that.accessToken = null;
 					}
 					console.log("New access token: " + that.accessToken);
