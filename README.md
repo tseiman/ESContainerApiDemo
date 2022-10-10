@@ -14,11 +14,10 @@ The router will give the container an own IP address such as 192.168.1.100 - so 
 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
+The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wireless RV55 
 
 ## ToDo
 - Enable a WiFi selection - currently only wifi networks are listed
-
-The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wireless RV55 
 
 ## requires:
 - linux environment
