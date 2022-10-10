@@ -10,7 +10,7 @@
 
 
 "use strict";
-
+const Logger            = require('./Logger.js');
 
 const TIMEOUT_IN_SECONDS = 5*50;
 class DataHandler {
@@ -25,7 +25,7 @@ class DataHandler {
 
 
 	emitStatus(ctx) {
-		console.log("emitStatus(ctx)");
+		Logger.debug("emitStatus(ctx)");
 		ctx.websocket.sendJSON(ctx.wifiStations,ctx.websocket.wss);
 	}
 
@@ -48,7 +48,7 @@ class DataHandler {
 			ctx.wifiStations[key].present = true;
 			ctx.wifiStations[key].lastseen = Math.floor(Date.now() / 1000);
 
-//			console.log(data[k]);
+
 			if(valuesList === null) {
 				ctx.wifiStations[key].present = data[k];
 
@@ -102,17 +102,17 @@ class DataHandler {
  				if((ctx.wifiStations[k].lastseen + TIMEOUT_IN_SECONDS) < Math.floor(Date.now() / 1000)) {
  					ctx.wifiStations[k].present =null;
  					ctx.wifiStations[k].ssid = null;
- 					console.log("invalidating station due to timeout");
+ 					Logger.log("invalidating station due to timeout");
  				}
 
 				if(ctx.wifiStations[k].present === null || ctx.wifiStations[k].ssid === null) {
- 					console.log("Removing station with key(" + k + ") ");
+ 					Logger.log("Removing station with key(" + k + ") ");
  					delete ctx.wifiStations[k];
  				} 
 
 
 		});
-		console.log("got new data: ", ctx.wifiStations);
+		Logger.debug("got new data: ", ctx.wifiStations);
 		ctx.websocket.sendJSON(ctx.wifiStations,ctx.websocket.wss);
 
 

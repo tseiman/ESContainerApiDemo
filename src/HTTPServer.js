@@ -11,25 +11,26 @@
 
 "use strict";
 
-var http = require('http');
-var https = require('https');
-var fs = require('fs');
-var tls = require('tls');
-var path = require('path');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const tls = require('tls');
+const path = require('path');
+const Logger            = require('./Logger.js');
 
 class HTTPServer {
 
 
 	constructor() {
 
-		console.log("initializing http server");
+		Logger.log("initializing http server");
 		
 		var that = this;
 		this.wwwPath = path.join(__dirname, 'www');
 		
 		var httpServer = http.createServer(function(req, res) { that.handleRequest(req, res); }).listen(8080, function (err) {
 		    if (!err) {
-		    	console.log('listening on http://' + httpServer.address().address + ':' + httpServer.address().port + '/');
+		    	Logger.log('listening on http://' + httpServer.address().address + ':' + httpServer.address().port + '/');
 		    }
 		});
 
@@ -39,7 +40,7 @@ class HTTPServer {
 		};
 		var httpsServer = https.createServer(options, function(req, res) { that.handleRequest(req, res); }).listen(8443, function (err) {
 		    if (!err) {
-		    	console.log('listening on https://' + httpsServer.address().address + ':' + httpsServer.address().port + '/ with self-signed certificate (warning is OK)');
+		    	Logger.log('listening on https://' + httpsServer.address().address + ':' + httpsServer.address().port + '/ with self-signed certificate (warning is OK)');
 		    } 
 		});
 
@@ -62,7 +63,7 @@ class HTTPServer {
 	        contentType = 'text/html';
 	    res.setHeader("Content-Type", contentType);
 
-	    console.log("Serving to [" + ip + "]" + this.wwwPath + url);
+	    Logger.log("Serving to [" + ip + "]" + this.wwwPath + url);
 
 	    var stream = fs.createReadStream(this.wwwPath + url);
 	    stream.on('error', function (err) {

@@ -13,7 +13,8 @@
 
 "use strict";
 
-const Client = require('node-rest-client').Client;
+const Client 			= require('node-rest-client').Client;
+const Logger            = require('./Logger.js');
 
 class RESTClient {
 
@@ -53,7 +54,7 @@ class RESTClient {
 
 	async connect() {
 		var that = this;
-		console.log("Connecting to API");
+		Logger.log("Connecting to API");
 	
 		var pollIntervalObj = null
 
@@ -62,7 +63,7 @@ class RESTClient {
 			await this.registerEventhandler();
 			pollIntervalObj = setInterval(async function () {await that.pollNewEvents(); }, 10000);
 		} catch(e) {
-			console.error("Cant connect to API service",e);
+			Logger.err("Cant connect to API service",e);
 			if(pollIntervalObj !== null) clearInterval(pollIntervalObj);
 			pollIntervalObj = null;
 		}
@@ -93,11 +94,11 @@ class RESTClient {
 					if(parsedData.data != null && parsedData.data.access_token != null) {
 						that.accessToken = JSON.parse(data).data.access_token;
 					} else {
-						console.log("API HTTP Message response: " + response.statusMessage);
-						console.log("Response data:", data);
+						Logger.log("API HTTP Message response: " + response.statusMessage);
+						Logger.debug("Response data:", data);
 						that.accessToken = null;
 					}
-					console.log("New access token: " + that.accessToken);
+					Logger.debug("New access token: " + that.accessToken);
 					// that.registerEventhandler();
 					resolve('resolved');
 			}).on('error',function(err){
@@ -112,7 +113,7 @@ class RESTClient {
 		var that = this;
 		return new Promise((resolve, reject) => {
 
-			console.log("Register API event handler");
+			Logger.debug("Register API event handler");
 			if(!this.isTokenValid()) {
 				reject("Invalid token cant register eventMethod");
 			}
@@ -137,7 +138,6 @@ class RESTClient {
 			this.restClient.methods.registerEventMethod(args,function (data, response) {
 				var parsedData = JSON.parse(data);
 				if(parsedData.data == null) resolve('resolved');
-			//	console.log(parsedData.data);
 				that.callback(parsedData.data, that.callbackCtx);
 
 				resolve('resolved');
@@ -153,9 +153,9 @@ class RESTClient {
 		var that = this;
 		return new Promise((resolve, reject) => {
 
-			console.log("Poll events");
+			Logger.log("Poll events");
 			if(!this.isTokenValid()) {
-				console.error("Invalid token");
+				Logger.err("Invalid token");
 				reject("Invalid token cant register eventMethod");
 			}
 
@@ -175,11 +175,10 @@ class RESTClient {
 					var parsedData = JSON.parse(data);
 					if((parsedData.data == null) || (parsedData.data.db == null) || (parsedData.data.db.last == null)) resolve('resolved');
 
-//					console.log(parsedData.data.db.last);
 					that.callback(parsedData.data.db.last, that.callbackCtx);
 
 				} else {
-					console.error("poll returned zero length", response.statusMessage);
+					Logger.err("poll returned zero length", response.statusMessage);
 					if(response.statusMessage === "Unauthorized") {
 						await that.autenticate();
 						await that.registerEventhandler();

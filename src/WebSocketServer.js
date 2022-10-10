@@ -11,7 +11,9 @@
 
 "use strict";
 
-var WebSocket = require('ws');
+const WebSocket 		= require('ws');
+const Logger            = require('./Logger.js');
+
 
 class WebSocketServer {
 
@@ -27,10 +29,9 @@ class WebSocketServer {
 		    ws.on('message', function incoming(data) {
 		        that.onMessage(data, ws);
 		    });
-		    console.log("Connected client !!");
+		    Logger.log("Connected client !!");
 		    for(const emitter of that.triggerEmitterOnConnect) {
 		    	emitter.emitter(emitter.ctx);
-//		    	console.log("emitting  !!", emitter);
 		    }
 		    
 		});
@@ -41,17 +42,17 @@ class WebSocketServer {
 	} 
 
 	registerEmitterTrigger(emitter, ctx) {
-		console.log("registerEmitterTrigger(emitter, ctx)");
+		Logger.debug("registerEmitterTrigger(emitter, ctx)");
 		this.triggerEmitterOnConnect.push({'emitter': emitter, 'ctx': ctx});
 	}
 
 
 
 	sendJSON(data, wss) {
-		console.log("Send JSON to Client serverinitiated");
+		Logger.log("Send JSON to Client serverinitiated");
 		var jsonStr = JSON.stringify(data);
 		if( ( wss == null) || (wss.clients == null)) {
-			console.log("no WS clients");
+			Logger.debug("no WS clients");
 			return;
 		}
 		wss.clients.forEach(function each(client) {
@@ -62,7 +63,7 @@ class WebSocketServer {
 	}
 
 	onMessage(data, ws) {
-		console.log("receiving data: " + data);
+		Logger.debug("receiving data: " + data);
         this.wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(data.toString());
@@ -74,7 +75,7 @@ class WebSocketServer {
 	upgradeToWSS(req, socket, head) {
 		var that = this;
 	    if (req.url === '/event') {
-	        console.log("webbrowser connected server");
+	        Logger.log("webbrowser connected server");
 
 	        that.wss.handleUpgrade(req, socket, head, function done(ws) {
 	            that.wss.emit('connection', ws, req);

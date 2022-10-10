@@ -16,6 +16,7 @@ const HTTPServer        = require('./HTTPServer.js');
 const WebSocketServer   = require('./WebSocketServer.js');
 const DataHandler       = require('./DataHandler.js');
 const RESTClient        = require('./RESTClient.js');
+const Logger            = require('./Logger.js');
 
 var Ping = require('ping');
 
@@ -40,11 +41,21 @@ const options = yargs
         describe: "The password for the API user", 
         type: "string",
         demandOption: true 
+    }).option("d", { 
+        alias: "debug", 
+        describe: "enable debug prints", 
+        type: "boolean",
+         default: false, 
+        demandOption: false 
     })
     .argv;
 
+if(options.debug) {
+    Logger.setDebug(true);
+}
+
 if((options.apiserver == null) || (! options.apiserver.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/) )  ) {
-    console.log("Give the URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar");
+    Logger.err("Give the URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar");
     process.exit(1);
 }
 
@@ -53,7 +64,7 @@ serveraddress = serveraddress[1];
 
 Ping.sys.probe(serveraddress, function(isAlive){
         var msg = isAlive ? 'host ' + serveraddress + ' is alive' : 'host ' + serveraddress + ' is dead';
-        console.log(msg);
+        Logger.log(msg);
 });
 
 var server = new HTTPServer();
