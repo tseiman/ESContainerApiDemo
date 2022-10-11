@@ -8,10 +8,14 @@ The router will give the container an own IP address such as 192.168.1.100 - so 
   * [ToDo](#user-content-todo)
   * [requires:](#user-content-requires)
   * [What does this do ?](#user-content-what-does-this-do-)
-  * [build & run & archive](#user-content-build---run---archive)
+  * [build & run & archive](#user-content-build--run--archive)
     + [Run image on AirLink OS](#user-content-run-image-on-airlink-os)
   * [security](#user-content-security)
     + [Browser blocking self signed demo certificate](#user-content-browser-blocking-self-signed-demo-certificate)
+
+## Demo Usecase
+![Demo Usecase](/doc/ESContainerAPIDemoUsecase.png)
+This demo shows how a container application can be build and how such a application makes use of the AirLink OS API. A common use case for that can be a custom (3rd party branded, web) configuration user interfaces which help to change settings on the router in a more controlled and simple way as it would be possible through the normal configuration user interface.
 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
@@ -20,7 +24,7 @@ The scripts can be easily adopted to other architectures like armv7 e.g. built i
 ## ToDo
 - Enable a WiFi selection - currently only wifi networks are listed
 
-## requires:
+## Requires
 - linux environment
 - docker buildx   (check availability with ```docker builx version```) if you do not have *docker buildx* installed you may follow buildx installation steps, binary installation might be the easiest one:
 https://github.com/docker/buildx#binary-release
