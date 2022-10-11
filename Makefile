@@ -17,7 +17,7 @@ build: app
 app: cert
 	cd src && npm install
 
-cert: src/cert/server.key src/cert/server.crt
+cert:
 	cd src/cert && openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -sha256 -days 3650 -nodes -subj "/C=DE/O=github.com\/tseiman/OU=ESContainerApiDemo/CN=tseiman.de"
 
 
