@@ -14,8 +14,12 @@ image:
 build: app
 	docker -D buildx build --platform linux/arm64/v8 --tag ${APP_NAME} .
 
-app:
+app: cert
 	cd src && npm install
+
+cert: src/cert/server.key src/cert/server.crt
+	cd src/cert && openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -sha256 -days 3650 -nodes -subj "/C=DE/O=github.com\/tseiman/OU=ESContainerApiDemo/CN=tseiman.de"
+
 
 clean: 
 	rm -Rf *.tar /src/node_modules

@@ -2,3 +2,5 @@
 *.tar.gz
 /src/node_modules/*
 !/src/node_modules/.keep
+/src/cert/*
+!/src/cert/.keep

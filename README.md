@@ -11,6 +11,7 @@ The router will give the container an own IP address such as 192.168.1.100 - so 
   * [build & run & archive](#build---run---archive)
     + [Run image on AirLink OS](#run-image-on-airlink-os)
   * [security](#security)
+    + [Browser blocking self signed demo certificate](#browser-blocking-self-signed-demo-certificate)
 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
@@ -83,3 +84,8 @@ In that case you can access the container by http://192.168.1.100
 ## security
 __Please note: the setup comes with default certificates - which are snake oil. For any security please substitute those trough useful ones!__
 Please do not use admin user for API access
+
+### Browser blocking self signed demo certificate
+Browsers will likely not accept the self signed certificate. It will come up with an error message like "This connection is not private" (Safari) or "Your connection is not secure" (Chrome). 
+If you are shure you are accessing the demo you likely want to override that (you should be sure that you are accessing the container demo server).
+Most of the browsers will offer you an "advanced" or "details" or similar button - after clicking that there is typically a button (like "Open the webpage" or "Proceed") to open the page anyhow. Nevertheless there are Chrome settings and versions which give you an error message *NET::ERR_CERT_INVALID* - here is no option given to proceed anyhow - but still you can proceed by __typing blindly into the window with the error message "thisisunsafe"__ and Chrome will proceed. 

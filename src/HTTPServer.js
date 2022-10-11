@@ -35,8 +35,8 @@ class HTTPServer {
 		});
 
 		var options = {
-		    key: fs.readFileSync(path.join(__dirname, 'server.key')),
-		    cert: fs.readFileSync(path.join(__dirname, 'server.crt'))
+		    key: fs.readFileSync(path.join(__dirname, 'cert/server.key')),
+		    cert: fs.readFileSync(path.join(__dirname, 'cert/server.crt'))
 		};
 		var httpsServer = https.createServer(options, function(req, res) { that.handleRequest(req, res); }).listen(8443, function (err) {
 		    if (!err) {
