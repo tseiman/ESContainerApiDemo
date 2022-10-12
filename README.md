@@ -31,7 +31,7 @@ The scripts can be easily adopted to other architectures like armv7 e.g. built i
 - Enable a WiFi selection - currently only wifi networks are listed
 
 ## Requires
-For **building** the Container image from scratch the folowing things might be required:
+For **building** the Container (taere are ready built releases available) image from scratch the folowing things might be required:
 - linux environment
 - docker buildx   (check availability with ```docker buildx version```) if you do not have *docker buildx* installed you may follow buildx installation steps, binary installation might be the easiest one:
 https://github.com/docker/buildx#binary-release
