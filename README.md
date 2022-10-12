@@ -33,9 +33,9 @@ The scripts can be easily adopted to other architectures like armv7 e.g. built i
 ## Requires
 For **building** the Container (there are ready built releases available) image from scratch the folowing things might be required:
 - linux environment
-- docker buildx   (check availability with ```docker buildx version```) if you do not have *docker buildx* installed you may follow buildx installation steps, binary installation might be the easiest one:
+- **docker buildx** (check availability with ```docker buildx version```) if you do not have *docker buildx* installed you may follow buildx installation steps, binary installation might be the easiest one:
 https://github.com/docker/buildx#binary-release
-- we want to build on likely different platform (e.g. amd64) the docker image as it is targeted for (e.g. Armv8) - so everything needs to be prepared for cross image build which requires typically qemu on ubuntu you install this with: ```sudo apt install qemu qemu-user-static qemu-user binfmt-support``` 
+- we want to build on likely different platform (e.g. amd64) the docker image as it is targeted for (e.g. Armv8) - so everything needs to be prepared for cross image build which requires typically **qemu** on ubuntu you install this with: ```sudo apt install qemu qemu-user-static qemu-user binfmt-support``` 
 Check proper binfmt config with:
 
 ```
@@ -50,8 +50,8 @@ enabled
 interpreter /usr/bin/qemu-arm-static
 ...
 ```
-- NodeJS (v16+) for local (container less) testing and important NodeJS Packet Manager **npm** to download required modules for the web service
-- openssl to generate the self signed (snake oil !) certificate for the HTTPS server and WebSocket
+- **NodeJS** (v16+) for local (container less) testing and important NodeJS Packet Manager **npm** to download required modules for the web service
+- **openssl** to generate the self signed (snake oil !) certificate for the HTTPS server and WebSocket
 
 ## What does this do ?
 this setup will install the NodeJS Armv8 package from Alpine Linux distribution. For the WebApplication from the *src* directory *npm* is executed to download required *node_modules*. Node_modules which need to be present in production and the WebApplication is then added to the docker image as well.
