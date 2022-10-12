@@ -51,6 +51,7 @@ interpreter /usr/bin/qemu-arm-static
 ...
 ```
 - NodeJS (v16+) for local (container less) testing and important NodeJS Packet Manager **npm** to download required modules for the web service
+- openssl to generate the self signed (snake oil !) certificate for the HTTPS server and WebSocket
 
 ## What does this do ?
 this setup will install the NodeJS Armv8 package from Alpine Linux distribution. For the WebApplication from the *src* directory *npm* is executed to download required *node_modules*. Node_modules which need to be present in production and the WebApplication is then added to the docker image as well.
