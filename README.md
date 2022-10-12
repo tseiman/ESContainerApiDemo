@@ -1,4 +1,4 @@
-# ESContainerApiDemo for Container enabled Sierra Wireless AirLink OS (such as on XR80/90 or RV55) 
+# ESContainerApiDemo for Container enabled Sierra Wireless AirLink OS (such as on XR80/90 or RX55) 
 Demonstration how to build a Docker container for the Sierra Wireless Docker enabled routers
 The demo will setup a docker image with NodeJS. The WebApplication running on NodeJS provides an example GUI which indirectly will make use of the router API for WiFi Client management (and which is accessible under 8080 for HTTP and 8443 for HTTPS).
 The router will give the container an own IP address such as 192.168.1.100 - so you should be able to reach the application under https://192.168.1.100:8443
@@ -25,7 +25,7 @@ An architectural overview:
 
 ## Target Platforms
 - Armv8 based Docker routers such as Sierra Wireless XR80, XR90
-The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wireless RV55 
+The scripts can be easily adopted to other architectures like armv7 e.g. built in Sierra Wireless RX55 
 
 ## ToDo
 - Enable a WiFi selection - currently only wifi networks are listed
@@ -50,6 +50,7 @@ enabled
 interpreter /usr/bin/qemu-arm-static
 ...
 ```
+- NodeJS for local (container less) testing and important NodeJS Packet Manager **npm** to download required modules for the web service
 
 ## What does this do ?
 this setup will install the NodeJS Armv8 package from Alpine Linux distribution. For the WebApplication from the *src* directory *npm* is executed to download required *node_modules*. Node_modules which need to be present in production and the WebApplication is then added to the docker image as well.
@@ -71,7 +72,7 @@ To export a loadable image you run
 ```
 make image
 ```
-this will create a tar file (escontainer_api_demo_armv8_<date>.tar) containing the docker image - this can be directly uploaded to the Armv8 XR80 (or with adaptations to Armv7 RV55)
+this will create a tar file (escontainer_api_demo_armv8_<date>.tar) containing the docker image - this can be directly uploaded to the Armv8 XR80 (or with adaptations to Armv7 RX55)
 
 ### Run image on AirLink OS
 Log in (locally - e.g. by accessing the default IP https://192.168.1.1) and navigate to **[Apps]** --> **[Images]**
