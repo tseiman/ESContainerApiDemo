@@ -37,6 +37,7 @@ class RESTClient {
 
 		this.restClient.registerMethod("authenticateMethod",  this.servername + "/api/v1/auth/tokens", "POST");
 		this.restClient.registerMethod("registerEventMethod", this.servername + "/api/v1/register/db", "POST");
+		this.restClient.registerMethod("getSystemInfoMethod", this.servername + "/api/v1/db/get", "POST");
 		this.restClient.registerMethod("getUpdateEvents", this.servername + "/api/v1/events", "GET");
 
 	}
@@ -59,7 +60,8 @@ class RESTClient {
 		var pollIntervalObj = null
 
 		try {
-			await this.autenticate();
+			if(!this.isTokenValid()) await this.autenticate();
+
 			await this.registerEventhandler();
 			pollIntervalObj = setInterval(async function () {await that.pollNewEvents(); }, 10000);
 		} catch(e) {
@@ -107,6 +109,62 @@ class RESTClient {
 
 		});
 
+	}
+
+	async getSystemInfo() {
+		var that = this;
+		return new Promise(async (resolve, reject) => {
+
+			Logger.log("Get System Info");
+			if(!that.isTokenValid()) {
+				Logger.err("Invalid token");
+				await that.autenticate();
+			}
+
+			var args = {
+				headers: { 
+					"Content-Type": "application/json",
+					"accept": "application/vnd.api+json",
+					"Authorization": "Bearer " + this.accessToken
+				},
+				parameters: { fetch: true},
+				data:   
+				    [ { "fields": [ 
+				    	"system.datastore.stats.avg.cpu15m"					, "system.datastore.stats.avg.cpu1m"			, "system.datastore.stats.avg.cpu5m"		, 
+				    	"system.geolocation.current.iso2"					, "system.geolocation.current.name"				, "system.geolocation.current.region"		, 
+				    	"system.hardware.check[wifi].present"				, "system.hardware.expansion[ExpansionR].id"	, "system.hardware.expansion[ExpansionR].init.status"	, 
+				    	"system.hardware.expansion[ExpansionR].modems"		, "system.hardware.id"							, "system.init.done"						, 
+				    	"system.mcu.temperature.state"						, "system.mcu.temperature.value"				, "system.mcu.voltage.state"				, 
+				    	"system.mcu.voltage.value"							, "system.os.builddate"							, "system.os.buildnumber"					,
+				      	"system.os.codeset.active"							, "system.os.codeset.inactive"					, "system.os.monitoring.storage[1].free"	,
+				      	"system.os.monitoring.storage[1].name"				, "system.os.monitoring.storage[1].usage"		, "system.os.monitoring.storage[2].name"	,
+				      	"system.os.monitoring.storage[2].usage"				, "system.os.monitoring.storage[3].name"		, "system.os.monitoring.storage[3].usage"	,
+				      	"system.os.name"
+				    ] } ]
+				  ,
+				requestConfig: {
+					timeout: 1000
+				}
+			};
+
+			this.restClient.methods.getSystemInfoMethod(args,async function (data, response) {
+				if(data.length > 0) {
+					var parsedData = JSON.parse(data);
+					if((parsedData.data == null) || (parsedData.data[0] == null) ) resolve('resolved');
+					Logger.debug("System Info:", JSON.stringify(parsedData,null,2));
+
+				} else {
+					Logger.err("system info returned zero length", response.statusMessage);
+					if(response.statusMessage === "Unauthorized") {
+						await that.autenticate();
+					}
+				}
+				resolve('resolved');
+			}).on('error',function(err){
+					reject(err);
+			}); 
+
+		});		
 	}
 
 	async registerEventhandler() {
