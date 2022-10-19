@@ -37,7 +37,11 @@ class DataHandler {
 
 
 			var keyList = k.match(/.*net\.wifi\.ssid\.scan\[([0-9a-zA-Z]*)\].*/);
-			if(keyList.length < 2) return;
+			if(keyList == null || keyList.length == null || keyList.length < 2) {
+				Logger.log("No Data - skipping dataset");
+				Logger.debug(data);
+				return;
+			}
 			var key = keyList[1];
 			key = key.replace("\'","");
 			key = key.replace("\"","");
