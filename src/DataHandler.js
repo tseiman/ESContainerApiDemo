@@ -32,8 +32,20 @@ class DataHandler {
 	sendMessage(data, ctx) {
 		
 		var tmpdata = {};
+
+		if(data == null) { 
+			Logger.error("Empty data provided for sendMessage(), data==null"); 
+			return; 
+		}
+
+		var keys = Object.keys(data);
 		
-		Object.keys(data).forEach(function(k){
+		if(keys.length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
+			Logger.error("Empty data provided for sendMessage(), empty data or invalid JSON"); 
+			return; 
+		}
+
+		keys.forEach(function(k){
 
 
 			var keyList = k.match(/.*net\.wifi\.ssid\.scan\[([0-9a-zA-Z]*)\].*/);
