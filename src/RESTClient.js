@@ -57,18 +57,23 @@ class RESTClient {
 		var that = this;
 		Logger.log("Connecting to API");
 	
-		var pollIntervalObj = null
+		return new Promise(async (resolve, reject) => {
 
-		try {
-			if(!this.isTokenValid()) await this.autenticate();
+			var pollIntervalObj = null
 
-			await this.registerEventhandler();
-			pollIntervalObj = setInterval(async function () {await that.pollNewEvents(); }, 10000);
-		} catch(e) {
-			Logger.err("Cant connect to API service",e);
-			if(pollIntervalObj !== null) clearInterval(pollIntervalObj);
-			pollIntervalObj = null;
-		}
+			try {
+				if(!this.isTokenValid()) await this.autenticate();
+
+				await this.registerEventhandler();
+				pollIntervalObj = setInterval(async function () {await that.pollNewEvents(); }, 10000);
+
+			} catch(e) {
+				Logger.err("Cant connect to API service",e);
+				if(pollIntervalObj !== null) clearInterval(pollIntervalObj);
+				pollIntervalObj = null;
+			}
+			resolve('resolved');
+		});
 
 	}
 
