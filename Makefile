@@ -23,6 +23,7 @@ versionfile:
 	echo "class VERSION { " >>src/VERSION.js 
 	echo " static getTag() { return '$(shell git tag)'; } " >>src/VERSION.js 
 	echo " static getCommit() { return '$(shell git rev-parse --short HEAD)'; } " >>src/VERSION.js 
+	echo " static getBuildTime() { return '$(shell date +%Y%m%d%H%M%S)'; } " >>src/VERSION.js 
 	echo "}" >>src/VERSION.js 
 	echo "module.exports = VERSION;" >>src/VERSION.js 
 

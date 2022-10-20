@@ -62,6 +62,7 @@ if((options.apiserver == null) || (! options.apiserver.match(/https?:\/\/(www\.)
 
 Logger.log('Source Git Commit', Version.getCommit());
 Logger.log('Source Git Tag',  Version.getTag());
+Logger.log('Source Build timestamp',  Version.getBuildTime());
 
 var serveraddress = options.apiserver.match(/^https?:\/\/(.*)(:[0-9]+)?/);
 serveraddress = serveraddress[1];
