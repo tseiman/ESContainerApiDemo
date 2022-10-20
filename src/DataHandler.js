@@ -33,6 +33,7 @@ class DataHandler {
 		
 		var tmpdata = {};
 
+
 		if(data == null) { 
 			Logger.error("Empty data provided for sendMessage(), data==null"); 
 			return; 
@@ -45,13 +46,13 @@ class DataHandler {
 			return; 
 		}
 
+
 		keys.forEach(function(k){
 
 
 			var keyList = k.match(/.*net\.wifi\.ssid\.scan\[([0-9a-zA-Z]*)\].*/);
 			if(keyList == null || keyList.length == null || keyList.length < 2) {
-				Logger.log("No Data - skipping dataset");
-				Logger.debug(data);
+				Logger.debug("No valid Data - skipping dataset");
 				return;
 			}
 			var key = keyList[1];
@@ -128,7 +129,7 @@ class DataHandler {
 
 
 		});
-		Logger.debug("got new data: ", ctx.wifiStations);
+		Logger.debug("got new data: ", ctx.wifiStations);	
 		ctx.websocket.sendJSON(ctx.wifiStations,ctx.websocket.wss);
 
 
