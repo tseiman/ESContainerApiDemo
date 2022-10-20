@@ -1,5 +1,6 @@
 *.tar
 *.tar.gz
+/src/VERSION.js
 /src/node_modules/*
 !/src/node_modules/.keep
 /src/cert/*

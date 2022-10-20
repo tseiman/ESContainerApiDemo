@@ -17,6 +17,7 @@ const WebSocketServer   = require('./WebSocketServer.js');
 const DataHandler       = require('./DataHandler.js');
 const RESTClient        = require('./RESTClient.js');
 const Logger            = require('./Logger.js');
+const Version           = require('./VERSION.js');
 
 var Ping = require('ping');
 
@@ -58,6 +59,9 @@ if((options.apiserver == null) || (! options.apiserver.match(/https?:\/\/(www\.)
     Logger.err("Give the URL of the API server - e.g. like https://192.168.1.1 or https://myxv80.mydomain.bar");
     process.exit(1);
 }
+
+Logger.log('Source Git Commit', Version.getCommit());
+Logger.log('Source Git Tag',  Version.getTag());
 
 var serveraddress = options.apiserver.match(/^https?:\/\/(.*)(:[0-9]+)?/);
 serveraddress = serveraddress[1];
