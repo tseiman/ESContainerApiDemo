@@ -24,6 +24,7 @@ class RESTClient {
 		this.apiuser = user;
 		this.apuserpw = password;
 		this.callback = null;
+		this.firstRun = true;
 
 		this.accessToken = null;
 
@@ -63,8 +64,12 @@ class RESTClient {
 
 			try {
 				if(!this.isTokenValid()) await this.autenticate();
-
+				if(that.firstRun) {
+					await that.getSystemInfo();
+					that.firstRun = false;
+				}
 				await this.registerEventhandler();
+
 				pollIntervalObj = setInterval(async function () {await that.pollNewEvents(); }, 10000);
 
 			} catch(e) {
