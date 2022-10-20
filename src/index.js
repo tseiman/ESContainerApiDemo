@@ -76,5 +76,6 @@ var rc = new RESTClient(options.apiserver, options.user, options.password);
 async function setupRC() {
     rc.setCallback(dh.sendMessage, dh);
     await rc.connect();
+    await rc.getSystemInfo();
 }
 setupRC();
